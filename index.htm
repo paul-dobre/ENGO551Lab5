@@ -32,12 +32,16 @@
       connected_flag = 0;
     }
 
+    //Failure Function that also tries reconnect after time
     function onFailure(message) {
       console.log("Failed");
       document.getElementById("messages").innerHTML = "Connection Failed- Retrying";
       setTimeout(MQTTconnect, reconnectTimeout);
     }
 
+
+    //Function to deal with data addition to broker
+    //This function handles both regular message and position
     function onDataArrived(r_message) {
       out_msg = "Message received " + r_message.payloadString + "<br>";
       out_msg = out_msg + "Message received Topic " + r_message.destinationName;
@@ -84,6 +88,8 @@
 
     }
 
+    //Function for connection
+    //Changed connect_flag to 1 so other functions can interact
     function onConnect() {
       console.log("Connected to " + host + " on port " + port);
       document.getElementById("status").innerHTML = "Connected";
@@ -91,6 +97,8 @@
       connected_flag = 1;
     }
 
+
+    //Function to disconnect, can be toggled after connection
     function disconnect() {
       if (connected_flag == 1) {
         mqtt.disconnect();
@@ -99,6 +107,7 @@
       }
     }
 
+    //Function that connects to provided host and port
     function MQTTconnect() {
       document.getElementById("messages").innerHTML = "";
       var s = document.forms["connform"]["server"].value;
@@ -124,6 +133,8 @@
       return false;
     }
 
+
+  //Function that handles topic subscription
     function sub_topics() {
       document.getElementById("messages").innerHTML = "";
       if (connected_flag == 0) {
@@ -139,7 +150,7 @@
     }
 
 
-
+    //Function that provides coordinates and random temperature
 	function publishLocation() {
 	
 		document.getElementById("messages").innerHTML = "";
@@ -181,7 +192,7 @@
 
 
 
-
+    //Function that sends message if the user is connected to server
     function send_message() {
       document.getElementById("messages").innerHTML = "";
       if (connected_flag == 0) {
@@ -203,6 +214,8 @@
       return false;
     }
 
+    //Function that toggles connect and disconnect button
+    //This was created with ChatGPT by prompting for toggle function
     function toggleFormsVisibility(connectVisible) {
       document.getElementById("connectForm").style.display = connectVisible ? "block" : "none";
       document.getElementById("disconnectBtn").style.display = connectVisible ? "none" : "block";
